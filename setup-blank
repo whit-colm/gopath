@@ -1,0 +1,55 @@
+#!/bin/sh
+
+#########################################################################
+# This file should aliased in your .bashrc and will not work otherwise. #
+### You will also need the SkilStak Colors Module to run this version ###
+############# A color-free version will be available "soon" #############
+#########################################################################
+
+if [ -f "setup" ] && [ -d "bin" ] && [ -d "src" ]
+then
+  path=$(pwd)
+  . $path/setup
+  echo "setup has been sourced."
+elif [ -d "bin" ] && [ -d "src" ]
+then
+  echo "$This will create a new setup file.\nDo you wish to continue? [Y/n]"
+  printf ">>> "
+  stty raw
+  confirm=$(dd bs=1 count=1 2> /dev/null)
+  stty -raw
+  if [ "$confirm" != "y" ]
+  then
+    echo "\nThe item will not be made."
+  else
+    path=$(pwd)
+    echo "#REMEBER: SOURCE ME, DON'T RUN ME.\n" >> setup
+    echo "export GOPATH=${path}" >> setup
+    echo "export GOPATH=${path}/bin" >> setup
+    echo "export GOPATH=${path}:\$PATH" >> setup
+    . $path/setup
+    echo "\nsetup has been created."
+    echo "setup has been sourced."
+  fi
+else
+  echo "This will create a new setup, bin, and src.\nDo you wish to continue? [Y/n]"
+  printf ">>> "
+  stty raw
+  confirm=$(dd bs=1 count=1 2> /dev/null)
+  stty -raw
+  if [ "$confirm" != "y" ]
+  then
+    echo "\nThe items will not be made."
+  else
+    mkdir src
+    mkdir bin
+    path=$(pwd)
+    echo "#REMEBER: SOURCE ME, DON'T RUN ME.\n" >> setup
+    echo "export GOPATH=${path}" >> setup
+    echo "export GOPATH=${path}/bin" >> setup
+    echo "export GOPATH=${path}:\$PATH" >> setup
+    . $path/setup
+    echo "\nsetup, bin, and src has been created."
+    echo "setup has been sourced."
+  fi
+fi
